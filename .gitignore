@@ -46,5 +46,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-
+# ignore larger terraform files not covered above
+**/.terraform
+**/.terraform.*
 *.db
