@@ -1,8 +1,7 @@
-sudo apt update
-sudo apt-get install default-jdk -y
+sudo apt update && sudo apt-get install default-jdk -y
 
 sudo apt install curl -y
-curl https://get.docker.com | sudo bash 
+curl -s https://get.docker.com | sudo bash 
 sudo usermod -aG docker $(whoami)
 
 
