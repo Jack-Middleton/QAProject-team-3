@@ -50,3 +50,4 @@ terraform.rc
 **/.terraform
 **/.terraform.*
 *.db
+mysql-secret.yaml

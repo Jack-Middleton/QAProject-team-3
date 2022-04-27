@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    stages {
+        stage('Install') {
+            steps {
+                sh "bash ./jenkins/installscripts.sh"
+            }
+        }
+
+        stage('Build and Push') {
+            environment {
+                DOCKER_CREDS = credentials('DOCKER_CREDS')
+            }
+            steps {
+                dir('/home/jenkins/.jenkins/workspace/Final-Proj-Dev/spring-petclinic-angular') {
+                sh "docker build -t jackmqa/frontend ." 
+                }
+                dir('/home/jenkins/.jenkins/workspace/Final-Proj-Dev/spring-petclinic-rest') {
+                sh "docker build -t jackmqa/pet-backend ." 
+                }
+                sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
+                sh "docker push jackmqa/frontend jackmqa/pet-backend "
+                sh "/bin/bash -c 'docker rmi \$(docker images -q)'"
+            }
+        }
+
+        stage('Terraform') {
+            steps {
+                sh "bash terraform.sh"
+            }
+        }
+
+        stage('Kubernetes') {
+            steps {
+                sh "bash kubernetes.sh"
+            }
+        }
+
+    }
+}

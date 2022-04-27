@@ -20,6 +20,6 @@ metadata:
 spec:
   containers:
   - name: backend
-    image: springcommunity/spring-petclinic-rest
+    image: jackmqa/pet-backend:latest
     ports:
     - containerPort: 9966

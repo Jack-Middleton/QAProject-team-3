@@ -7,6 +7,7 @@ cd terraform
 
 terraform init
 
-terraform apply
+terraform plan -out plan
+terraform apply plan
 
 cd ..
