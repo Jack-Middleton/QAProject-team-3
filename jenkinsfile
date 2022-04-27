@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Install') {
             steps {
-                sh "bash ./jenkins/install.sh -S"
+                sh "sudo bash -S ./jenkins/install.sh"
             }
         }
 
