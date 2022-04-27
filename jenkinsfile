@@ -1,11 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Install') {
-            steps {
-                sh "sudo bash -S ./jenkins/install.sh"
-            }
-        }
+   
 
         stage('Build and Push') {
             environment {
@@ -26,13 +22,20 @@ pipeline {
 
         stage('Terraform') {
             steps {
-                sh "bash terraform.sh"
+                sh "cd terraform"
+                sh "terraform init"
+                sh "terraform apply"
+                sh "cd .."
             }
         }
 
         stage('Kubernetes') {
             steps {
-                sh "bash kubernetes.sh"
+                sh "aws eks update-kubeconfig --name project-cluster"
+                sh "kubectl apply -f kubernetes/frontend.yaml"
+                sh "kubectl delete pod backend"
+                sh "kubectl apply -f kubernetes/backend.yaml"
+                sh "kubectl apply -f kubernetes/mysql-deployment.yaml"
             }
         }
 
