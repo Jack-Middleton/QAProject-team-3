@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages {
+        stage('Install') {
+            steps {
+                sh "bash install.sh"
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh "bash test.sh"
+            }
+        }
+        stage('Build and Push') {
+            environment {
+                DOCKER_CREDS = credentials('docker-creds')
+            }
+            steps {
+                sh "docker-compose build --parallel"
+                sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
+                sh "docker-compose push"
+                sh "/bin/bash -c 'docker rmi \$(docker images -q)'"
+            }
+        }
+
+        stage('Terraform') {
+            steps {
+                sh "bash terraform.sh"
+            }
+        }
+
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: "*/htmlcov/*"
+        }
+    }
+}

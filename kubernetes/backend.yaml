@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: ClusterIP     # set the type of Service
+  selector:
+    app: backend      # referencing the Pod's label
+  ports:
+  - protocol: TCP
+    port: 5001
+    targetPort: 5001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+  labels:
+    app: backend      # needs to be the same as Service's selector
+spec:
+  containers:
+  - name: backend
+    image: htrvolker/python-backend:letters
+    ports:
+    - containerPort: 5001
