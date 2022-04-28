@@ -1,1 +1,0 @@
-# QAProject-team-3
